@@ -37,7 +37,6 @@ jobs:
 
           curl -fsSL https://get.nextflow.io | bash
           sudo install -m 0755 nextflow /usr/local/bin/nextflow
-
           nextflow -version
 
       - name: Validate starter structure
@@ -107,4 +106,7 @@ jobs:
             exercises/FOUNDATIONS_EXERCISES.md
           )
 
-          for file in "${required_files[@]}
+          for file in "${required_files[@]}"; do
+            test -s "${file}"
+            echo "OK: ${file}"
+          done
