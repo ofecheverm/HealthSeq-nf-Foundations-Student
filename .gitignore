@@ -1,0 +1,21 @@
+# Nextflow runtime files
+.nextflow/
+.nextflow.log*
+work/
+
+# Generated lesson outputs
+lessons/outputs/
+lessons/custom_outputs/
+lessons/experiment_outputs/
+
+# Participant progress file
+MY_PROGRESS.md
+
+# Operating-system and editor files
+.DS_Store
+.vscode/
+
+# Temporary files
+*.tmp
+*.swp
+*~

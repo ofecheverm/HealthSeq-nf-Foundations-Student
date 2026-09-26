@@ -1,0 +1,54 @@
+{
+  "name": "HealthSeq-NF Foundations",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": false,
+      "installOhMyZsh": false
+    },
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "21"
+    }
+  },
+
+  "containerEnv": {
+    "NXF_VER": "26.04.6",
+    "NXF_HOME": "/workspaces/.nextflow"
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "nextflow.nextflow",
+        "redhat.vscode-yaml",
+        "timonwong.shellcheck",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        "files.insertFinalNewline": true,
+        "files.trimTrailingWhitespace": true,
+        "editor.formatOnSave": false,
+        "[nextflow]": {
+          "editor.formatOnSave": false,
+          "editor.tabSize": 4,
+          "editor.insertSpaces": true
+        },
+        "[json]": {
+          "editor.tabSize": 2,
+          "editor.insertSpaces": true
+        },
+        "[yaml]": {
+          "editor.tabSize": 2,
+          "editor.insertSpaces": true
+        }
+      }
+    }
+  },
+
+  "remoteEnv": {
+    "PATH": "/usr/local/bin:${containerEnv:PATH}"
+  }
+}

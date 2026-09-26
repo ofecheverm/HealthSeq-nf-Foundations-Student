@@ -1,0 +1,178 @@
+name: HealthSeq-NF Foundations lessons
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: foundations-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lessons:
+    name: Validate beginner Nextflow lessons
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    env:
+      NXF_VER: "26.04.6"
+      NXF_ANSI_LOG: "false"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Install Nextflow
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          curl -fsSL https://get.nextflow.io | bash
+          sudo install -m 0755 nextflow /usr/local/bin/nextflow
+
+          nextflow -version
+
+      - name: Validate foundations environment
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ./scripts/check_environment.sh
+
+      - name: Run Lesson 1
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          nextflow -C lessons/lesson.config run \
+            lessons/01_hello_nextflow.nf
+
+          output_file="$(
+            find work \
+              -name hello_nextflow.txt \
+              -type f |
+            head -n 1
+          )"
+
+          test -s "${output_file}"
+          grep -qx "Hello from Nextflow" "${output_file}"
+
+      - name: Run Lesson 2
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rm -rf work .nextflow
+
+          nextflow -C lessons/lesson.config run \
+            lessons/02_process_inputs.nf
+
+          output_file="$(
+            find work \
+              -name upec_context_summary.txt \
+              -type f |
+            head -n 1
+          )"
+
+          test -s "${output_file}"
+          grep -q "U13824" "${output_file}"
+          grep -q "SRR21010776" "${output_file}"
+
+      - name: Run Lesson 3
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rm -rf work .nextflow
+
+          nextflow -C lessons/lesson.config run \
+            lessons/03_channels_and_data_flow.nf
+
+          output_file="$(
+            find work \
+              -name upec_final_report.txt \
+              -type f |
+            head -n 1
+          )"
+
+          test -s "${output_file}"
+          grep -q "two-process Nextflow workflow" "${output_file}"
+
+      - name: Run Lesson 4
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rm -rf work .nextflow
+
+          nextflow -C lessons/lesson.config run \
+            lessons/04_parameters.nf \
+            --case_name "Foundations CI"
+
+          output_file="$(
+            find work \
+              -name parameter_report.txt \
+              -type f |
+            head -n 1
+          )"
+
+          test -s "${output_file}"
+          grep -q "Teaching case: Foundations CI" "${output_file}"
+
+      - name: Run Lesson 5
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rm -rf work .nextflow lessons/outputs
+
+          nextflow -C lessons/lesson.config run \
+            lessons/05_small_pipeline.nf \
+            --case_name "Foundations CI" \
+            --lesson_outdir lessons/outputs
+
+          test -s lessons/outputs/lesson5_final_report.txt
+          grep -q "Teaching case: Foundations CI" \
+            lessons/outputs/lesson5_final_report.txt
+          grep -q "antimicrobial susceptibility" \
+            lessons/outputs/lesson5_final_report.txt
+          grep -q "Generated reproducibly with Nextflow" \
+            lessons/outputs/lesson5_final_report.txt
+
+      - name: Validate documentation
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required_files=(
+            README.md
+            COURSE_START.md
+            COURSE_PATH.md
+            lessons/01_first_nextflow.md
+            lessons/02_process_inputs.md
+            lessons/03_channels_and_data_flow.md
+            lessons/04_parameters.md
+            lessons/05_small_pipeline.md
+            lessons/06_git_and_github.md
+            lessons/07_prepare_for_applied.md
+            exercises/FOUNDATIONS_EXERCISES.md
+            exercises/FOUNDATIONS_ANSWER_KEY.md
+            docs/INSTRUCTOR_GUIDE.md
+          )
+
+          for file in "${required_files[@]}"; do
+            test -s "${file}"
+            echo "OK: ${file}"
+          done

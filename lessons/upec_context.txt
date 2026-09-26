@@ -1,0 +1,3 @@
+U13824 is a published uropathogenic Escherichia coli isolate.
+The course uses public paired-end sequencing reads from SRR21010776.
+HealthSeq-NF reproduces sequencing quality control and reference alignment.
