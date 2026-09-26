@@ -16,7 +16,6 @@ process CREATE_CASE_SUMMARY {
     script:
     """
     echo "Teaching case: ${case_name}" > case_summary.txt
-    echo "" >> case_summary.txt
     cat ${context_file} >> case_summary.txt
     """
 }
@@ -35,35 +34,18 @@ process ADD_EVIDENCE_BOUNDARY {
     cat ${case_summary} > bounded_case_summary.txt
     echo "" >> bounded_case_summary.txt
     echo "Evidence boundary:" >> bounded_case_summary.txt
-    echo "Sequencing QC and alignment do not independently confirm" \
-        >> bounded_case_summary.txt
-    echo "antimicrobial susceptibility or treatment recommendations." \
+    echo "Computational output requires scientific interpretation." \
         >> bounded_case_summary.txt
     """
 }
 
-process FINALIZE_LESSON_REPORT {
-    tag "final report"
-
-    publishDir params.lesson_outdir, mode: 'copy'
-
-    input:
-    path bounded_report
-
-    output:
-    path "lesson5_final_report.txt"
-
-    script:
-    """
-    echo "HealthSeq-NF Beginner Pipeline" > lesson5_final_report.txt
-    echo "==============================" >> lesson5_final_report.txt
-    echo "" >> lesson5_final_report.txt
-    cat ${bounded_report} >> lesson5_final_report.txt
-    echo "" >> lesson5_final_report.txt
-    echo "Generated reproducibly with Nextflow." \
-        >> lesson5_final_report.txt
-    """
-}
+// STUDENT TASK 1:
+// Add a process named FINALIZE_LESSON_REPORT.
+//
+// The process must:
+// - receive the bounded report as a path input;
+// - create lesson5_final_report.txt;
+// - publish the final report to params.lesson_outdir.
 
 workflow {
     context_ch = Channel.fromPath(
@@ -82,7 +64,7 @@ workflow {
         CREATE_CASE_SUMMARY.out.summary
     )
 
-    FINALIZE_LESSON_REPORT(
-        ADD_EVIDENCE_BOUNDARY.out.bounded_report
-    )
+    // STUDENT TASK 2:
+    // Connect ADD_EVIDENCE_BOUNDARY.out.bounded_report
+    // to FINALIZE_LESSON_REPORT.
 }

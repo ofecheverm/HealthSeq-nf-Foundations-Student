@@ -1,13 +1,7 @@
 nextflow.enable.dsl = 2
 
-/*
- * Lesson 4 introduces parameters.
- *
- * A parameter allows a user to change workflow behavior from the command
- * line without editing the workflow source code.
- */
-
-params.case_name = 'U13824'
+// STUDENT TASK 1:
+// Define params.case_name with U13824 as the default value.
 
 process CREATE_PARAMETER_REPORT {
     tag "${case_name}"
@@ -20,21 +14,14 @@ process CREATE_PARAMETER_REPORT {
 
     script:
     """
-    echo "HealthSeq-NF Parameter Report" > parameter_report.txt
-    echo "=============================" >> parameter_report.txt
-    echo "Teaching case: ${case_name}" >> parameter_report.txt
-    echo "The case name was supplied through a Nextflow parameter." \
-        >> parameter_report.txt
+    echo "Teaching case: ${case_name}" > parameter_report.txt
     """
 }
 
 workflow {
-    /*
-     * Channel.value creates a channel containing one value.
-     *
-     * The value comes from params.case_name.
-     */
-    case_name_ch = Channel.value(params.case_name)
+    // STUDENT TASK 2:
+    // Create a value channel from params.case_name.
 
-    CREATE_PARAMETER_REPORT(case_name_ch)
+    // STUDENT TASK 3:
+    // Pass the value channel to CREATE_PARAMETER_REPORT.
 }
