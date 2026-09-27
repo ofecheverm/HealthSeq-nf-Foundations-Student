@@ -44,6 +44,38 @@ You will learn how to:
 - push your work to GitHub;
 - explain the limits of computational results.
 
+## How to Read Command Examples
+
+Terminal commands appear in blocks labeled `bash`.
+
+Lines beginning with `#` are explanations for humans. Bash treats these lines
+as comments and does not execute them.
+
+For example:
+
+```bash
+# Show the current directory.
+pwd
+
+# List files and directories in the current directory.
+ls
+```
+
+You can copy and paste the complete block. The terminal runs the commands and
+ignores the explanatory comments.
+
+The lessons also use these shell symbols:
+
+- `\` continues the same command on the next line;
+- `|` sends the output of one command to another command;
+- `$name` retrieves a value stored in a shell variable;
+- `$(...)` runs a command and captures its output;
+- `"..."` keeps text or a path together as one value;
+- `..` refers to the parent directory;
+- `./` refers to the current directory.
+
+Do not type the `$` symbol sometimes displayed as part of a terminal prompt.
+
 ## Step 1: Create a GitHub Account
 
 If you already have a GitHub account, continue to Step 2.
@@ -137,12 +169,15 @@ Do not type the `$` symbol shown in terminal examples.
 Show your current location:
 
 ```bash
+# Print the path of the current working directory.
+# This confirms which repository or folder the terminal is using.
 pwd
 ```
 
 List repository files:
 
 ```bash
+# List files and directories in the current location.
 ls
 ```
 
@@ -160,30 +195,46 @@ scripts
 Display the lesson input:
 
 ```bash
+# Display the contents of lessons/upec_context.txt in the terminal.
+# cat reads a file and prints its text.
 cat lessons/upec_context.txt
 ```
 
 Enter the lessons directory:
 
 ```bash
+# Change the current directory to lessons/.
+# cd means change directory.
 cd lessons
 ```
 
-List its contents:
+List the contents of the lessons directory:
 
 ```bash
+# List the files in the current directory.
+# The current directory is now lessons/.
 ls
 ```
 
 Return to the repository root:
 
 ```bash
+# Move to the parent directory.
+# Two periods, .., mean the directory one level above the current directory.
 cd ..
+```
+
+Confirm your location:
+
+```bash
+# Confirm that the terminal has returned to the repository root.
+pwd
 ```
 
 Check the Git repository:
 
 ```bash
+# Show the current Git branch and any changed files.
 git status
 ```
 
@@ -193,11 +244,15 @@ The initial repository should normally report:
 nothing to commit, working tree clean
 ```
 
+This means that Git does not detect any uncommitted changes.
+
 ## Step 6: Verify the Environment
 
 Run:
 
 ```bash
+# Run the environment-checking script included in this repository.
+# ./ means that the script is located relative to the current directory.
 ./scripts/check_environment.sh
 ```
 
@@ -223,21 +278,44 @@ lessons/01_first_nextflow.md
 Run:
 
 ```bash
+# Run the Lesson 1 Nextflow workflow.
+# -C tells Nextflow to load lessons/lesson.config before starting.
+# The backslash, \, continues the same command on the next line.
 nextflow -C lessons/lesson.config run \
   lessons/01_hello_nextflow.nf
 ```
+
+The command has these parts:
+
+- `nextflow` starts the Nextflow program;
+- `-C lessons/lesson.config` loads the course configuration;
+- `run` tells Nextflow to execute a workflow;
+- `lessons/01_hello_nextflow.nf` identifies the workflow file;
+- `\` continues the command on the next line.
 
 The `SAY_HELLO` process should finish successfully.
 
 Locate its output:
 
 ```bash
-find work -name hello_nextflow.txt -type f
+# Search inside work/ for a regular file named hello_nextflow.txt.
+# find searches through directories and their subdirectories.
+# -name selects files with the specified name.
+# -type f limits the results to regular files.
+find work \
+  -name hello_nextflow.txt \
+  -type f
 ```
+
+Nextflow stores process execution files under `work/`.
 
 Display the output:
 
 ```bash
+# Find the first matching output file and save its path in hello_file.
+# $(...) runs the enclosed commands and captures their output.
+# The pipe symbol, |, sends the find results to head.
+# head -n 1 keeps only the first matching path.
 hello_file="$(
   find work \
     -name hello_nextflow.txt \
@@ -245,8 +323,20 @@ hello_file="$(
   head -n 1
 )"
 
+# Display the contents of the file stored in hello_file.
+# The $ symbol retrieves the value stored in the variable.
+# Quotation marks keep the complete path together as one value.
 cat "$hello_file"
 ```
+
+The shell commands above introduce several useful ideas:
+
+- `hello_file=` creates a shell variable;
+- `$(...)` captures the output produced by another command;
+- `|` passes information from one command to another;
+- `head -n 1` selects the first result;
+- `$hello_file` retrieves the stored file path;
+- `cat` displays the contents of the selected file.
 
 Expected result:
 
@@ -310,6 +400,12 @@ Open:
 exercises/FOUNDATIONS_EXERCISES.md
 ```
 
+Also complete:
+
+```text
+exercises/PAPER_CONNECTION.md
+```
+
 Complete the exercises after the corresponding lessons.
 
 Write explanations in your own words.
@@ -319,10 +415,16 @@ student repository.
 
 ## Step 10: Document Your Progress
 
-Create:
+Create the progress file:
 
-```text
-MY_PROGRESS.md
+```bash
+# Create an empty Markdown file named MY_PROGRESS.md.
+# touch creates the file if the file does not already exist.
+touch MY_PROGRESS.md
+
+# Open the file in the Codespaces editor.
+# code opens a file in Visual Studio Code.
+code MY_PROGRESS.md
 ```
 
 Use this structure:
@@ -351,37 +453,62 @@ Describe the sections you completed or modified.
 Describe one way you could extend the project.
 ```
 
+Save the file before continuing.
+
 ## Step 11: Save Meaningful Checkpoints
 
 Before committing, inspect your work:
 
 ```bash
+# Show the current Git branch and changed files.
 git status
+
+# Display the exact unstaged changes in tracked files.
 git diff
 ```
 
 Stage only the files you intentionally changed:
 
 ```bash
+# Replace <file> with the path of the file you want to stage.
+# git add prepares the selected file for the next commit.
 git add <file>
+```
+
+For example:
+
+```bash
+# Stage the progress document.
+git add MY_PROGRESS.md
 ```
 
 Review the staged changes:
 
 ```bash
+# Display the changes currently prepared for the next commit.
 git diff --cached
 ```
 
-Commit:
+Create a commit:
 
 ```bash
+# Record a named checkpoint in the local Git history.
+# The text after -m describes the completed change.
 git commit -m "Describe the completed change"
 ```
 
-Push:
+Push the commit:
 
 ```bash
+# Send local commits to the repository on GitHub.
 git push
+```
+
+Confirm the final Git status:
+
+```bash
+# Confirm that the commit was recorded and pushed.
+git status
 ```
 
 Suggested project commits include:
@@ -462,4 +589,10 @@ Open:
 lessons/01_first_nextflow.md
 ```
 
-Then run the first workflow.
+Then run the first workflow:
+
+```bash
+# Begin Lesson 1 with the course configuration.
+nextflow -C lessons/lesson.config run \
+  lessons/01_hello_nextflow.nf
+```
