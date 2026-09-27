@@ -1,4 +1,4 @@
-nextflow.enable.dsl = 2  // Use the current Nextflow DSL2 syntax.
+nextflow.enable.dsl = 2
 
 /*
  * This is the first course workflow.
@@ -6,14 +6,13 @@ nextflow.enable.dsl = 2  // Use the current Nextflow DSL2 syntax.
  * A Nextflow process describes one reproducible task.
  * This process creates a small text file.
  */
-process SAY_HELLO {  // Define a process named SAY_HELLO.
-
+process SAY_HELLO {
     output:
-    path "hello_nextflow.txt"  // Declare the file the process must create.
+    path "hello_nextflow.txt"
 
     script:
     """
-    echo "Hello from Nextflow" > hello_nextflow.txt  # Write the message to the file.
+    echo "Hello from Nextflow" > hello_nextflow.txt
     """
 }
 
@@ -21,6 +20,5 @@ process SAY_HELLO {  // Define a process named SAY_HELLO.
  * The workflow block tells Nextflow which process to execute.
  */
 workflow {
-
-    SAY_HELLO()  // Run the SAY_HELLO process.
+    SAY_HELLO()
 }

@@ -1,349 +1,188 @@
-# Lesson 2: Process Inputs and Outputs
+# Lesson 2: Proces* Inputs and Outputs
 
-## Learning Objective
+## Learning O*jective
 
-By the end of this lesson, you should be able to:
+By the end of this lesson* you should be able to:
 
-- explain why a process needs an input declaration;
+- explain*why a process needs an input decla*ation;
 - identify a file channel;
-- explain how Nextflow stages an input file;
-- identify the relationship between an input and an output;
-- locate the task directory and generated file.
+* explain how Nextflow stages an in*ut file;
+- identify the relationsh*p between an input and an output;
+* locate the task directory and gen*rated file.
 
 ## The Input File
 
-Open:
+Op*n:
 
-```text
-lessons/upec_context.txt
-```
+    lessons/upec_context.txt
 
-This small text file contains information about the published UPEC teaching
+*his small text file contains infor*ation about the published UPEC tea*hing
 case.
 
-The file represents data that must enter a process.
+The file represents da*a that must enter a process.
 
-In HealthSeq-NF Applied, the inputs are larger scientific files, including
-paired FASTQ reads and a reference FASTA. The same underlying Nextflow concept
-applies.
+In the complete HealthSeq-NF workflow, the inputs are larger scientific files,
+including paired FASTQ reads a*d a reference FASTA. The same unde*lying
+Nextflow concept applies.
 
-## The Process
+#* The Process
 
 Open:
 
-```text
-lessons/02_process_inputs.nf
-```
+    lessons/0*_process_inputs.nf
 
-The process is named:
+The process is*named:
 
-```text
-SUMMARIZE_CONTEXT
-```
+    SUMMARIZE_CONTEXT
 
-The process contains two `STUDENT TASK` sections.
+The*process receives:
 
-Complete those sections before running the workflow.
+    path contex*_file
 
-### File Input
+The `path` input declaratio* tells Nextflow that the process r*quires a file.
 
-The process must receive:
-
-```groovy
-path context_file
-```
-
-**Input key**
-
-- `path`: declare a file input;
-- `context_file`: the name used for the file inside the process.
-
-The `path` declaration tells Nextflow that the process requires a file.
-
-Nextflow stages the input file inside the process task directory before
-executing the script.
-
-### Declared Output
-
-The process must create:
-
-```text
-upec_context_summary.txt
-```
-
-The output declaration tells Nextflow which file to expect after the command
-finishes.
+Nextflow stages th* input file inside the process tas* directory before
+executing the sc*ipt.
 
 ## The Input Channel
 
-The workflow creates a channel with:
+The wo*kflow creates a channel with:
 
-```groovy
-Channel.fromPath(...)
-```
+   *Channel.fromPath(...)
 
-A channel transports data into a process or between processes.
+A channel t*ansports data between the workflow*and a process.
 
-In this lesson, the channel carries one text-file path.
+In this lesson, th* channel carries one text filepath*
 
-In larger workflows, channels can carry:
-
+In HealthSeq-NF, channels carry:*
 - paired FASTQ files;
-- sample information;
-- reference genomes;
-- alignment files;
-- quality-control reports;
-- parameter values.
-
-The lesson follows this data flow:
-
-```text
-upec_context.txt
-→ input channel
-→ SUMMARIZE_CONTEXT
-→ upec_context_summary.txt
-```
-
-## Complete the Student Tasks
-
-In `lessons/02_process_inputs.nf`:
-
-1. declare `context_file` as a `path` input;
-2. add shell commands that create `upec_context_summary.txt`;
-3. copy the contents of `context_file` into the output.
-
-The output filename must match the declared output exactly.
+- sample me*adata;
+- a reference genome;
+- ali*nment files;
+- quality-control rep*rts.
 
 ## Run Lesson 2
 
-From the repository root, run:
+From the re*ository root, run:
 
-```bash
-# Run Lesson 2 with the course configuration.
-nextflow -C lessons/lesson.config run \
-  lessons/02_process_inputs.nf
-```
+    nextflow -C lessons/lesson.config run lessons/02_process_inputs.nf
 
-**Command key**
+The lesson-s*ecific configuration disables the *omplete pipeline's trace,
+timeline* report, and workflow-diagram outp*ts. This keeps the lesson run
+smal* and avoids overwriting reports fr*m the main workflow.
 
-- `-C`: load a configuration file;
-- `lessons/lesson.config`: the course configuration;
-- `run`: execute a workflow;
-- `\`: continue the command on the next line.
+You should s*e:
 
-You should see a process similar to:
+    SUMMARIZE_CONTEXT (UPEC te*ching case) | 1 of 1 ✔
 
-```text
-SUMMARIZE_CONTEXT (UPEC teaching case) | 1 of 1 ✔
-```
+## Locate *he Output
 
-The task identifier and run name may differ.
+Run:
 
-## Locate the Output
+    find work -na*e upec_context_summary.txt -type f*
+Display the newest matching outpu*:
 
-```bash
-# Find the generated summary file under work/.
-find work \
-  -name upec_context_summary.txt \
-  -type f
-```
+    summary_file="$(find work -*ame upec_context_summary.txt -type*f -printf '%T@ %p\n' | sort -rn | *ead -n 1 | cut -d' ' -f2-)"
 
-**Command key**
+    c*t "$summary_file"
 
-- `find`: search for files;
-- `work`: search inside the `work/` directory;
-- `-name`: search by filename;
-- `-type f`: return regular files only.
+The output shou*d contain:
 
-## Display the Output
+- a heading;
+- the con*ents of `upec_context.txt`;
+- the *ame of the staged input file.
 
-```bash
-# Display the first matching summary file.
-cat "$(find work -name upec_context_summary.txt -type f | head -n 1)"
-```
-
-**Command key**
-
-- `cat`: display a file;
-- `$(...)`: run the command inside and use its result;
-- `|`: pass one command's result to the next;
-- `head -n 1`: keep only the first result.
-
-The output should contain the information from:
-
-```text
-lessons/upec_context.txt
-```
-
-## What Nextflow Did
+## *hat Nextflow Did
 
 Nextflow:
 
-1. read the input-file path;
-2. created a task directory under `work/`;
-3. staged the input file in that directory;
-4. executed the process script;
+1. re*d the input filepath;
+2. created a*task directory under `work/`;
+3. s*aged the input file in that direct*ry;
+4. executed the process script*
 5. identified the declared output;
 6. recorded the successful task.
+*## Input and Output Pattern
 
-## Input and Output Pattern
+The l*sson follows this pattern:
 
-This lesson follows:
+    up*c_context.txt
+    → SUMMARIZE_CONT*XT
+    → upec_context_summary.txt
+The complete HealthSeq-NF pipeline uses the same pattern repeatedly:
+*    paired FASTQ
+    → FASTP
+    →*trimmed paired FASTQ
 
-```text
-upec_context.txt
-→ SUMMARIZE_CONTEXT
-→ upec_context_summary.txt
-```
+    trimmed *aired FASTQ
+    → BWA_MEM2_MEM
+   *→ SAM alignment
 
-HealthSeq-NF Applied uses the same pattern with larger scientific files:
+    SAM alignment*    → SAMTOOLS_SORT_INDEX
+    → so*ted BAM and BAM index
 
-```text
-paired FASTQ
-→ fastp
-→ processed paired FASTQ
-```
+## Check Yo*r Understanding
 
-```text
-processed paired FASTQ
-→ BWA-MEM2
-→ alignment
-```
+Answer these ques*ions:
 
-```text
-alignment
-→ SAMtools
-→ sorted BAM and BAM index
-```
-
-## Check Your Understanding
-
-Answer these questions:
-
-1. What file enters the process?
-2. What channel carries the file?
-3. What does `path context_file` mean?
-4. Where does Nextflow execute the process?
+1. What file enters the pro*ess?
+2. What channel carries the f*le?
+3. What does `path context_fil*` mean?
+4. Where does Nextflow exe*ute the process?
 5. What output file is declared?
-6. Why must the command create the exact declared output name?
-7. How is this pattern similar to the Applied sequencing workflow?
+6. How is this patt*rn similar to the FASTQ-processing*workflow?
 
-Record your answers in:
+## Controlled Input Err*r
 
-```text
-exercises/FOUNDATIONS_EXERCISES.md
-```
+This activity demonstrates a si*ple and informative failure.
 
-## Controlled Input Error
+Temp*rarily change:
 
-This activity demonstrates a simple and informative failure.
-
-Temporarily change:
-
-```text
-upec_context.txt
-```
+    upec_context.t*t
 
 to:
 
-```text
-missing_context.txt
-```
+    missing_context.txt
 
-Run the lesson again:
+R*n the lesson again:
 
-```bash
-# Run the workflow with the incorrect input path.
-nextflow -C lessons/lesson.config run \
-  lessons/02_process_inputs.nf
-```
+    nextflow -C lessons/lesson.config run lessons/02_process_inputs.nf
 
-Nextflow should report that the input file does not exist.
+Nextflow sh*uld report that the input file doe* not exist.
 
-Read the first clear error message.
+Read the error carefu*ly, then restore:
 
-Then restore:
+    upec_contex*.txt
 
-```text
-upec_context.txt
-```
+Run the lesson again and con*irm that it succeeds.
 
-Run the lesson again:
+This demons*rates an important troubleshooting*principle:
 
-```bash
-# Confirm that the corrected workflow succeeds.
-nextflow -C lessons/lesson.config run \
-  lessons/02_process_inputs.nf
-```
+> Start with the first*clear error message and verify the*required inputs.
 
-This demonstrates an important troubleshooting principle:
-
-> Start with the first clear error message and verify the required inputs.
-
-## Lesson Checkpoint
+## Lesson Checkp*int
 
 You have completed this lesson when:
 
-- both `STUDENT TASK` sections are complete;
-- the process succeeds with the correct input;
-- you locate `upec_context_summary.txt`;
-- you observe one controlled missing-input error;
-- you correct the input path;
-- the process succeeds again;
-- you can explain the input, channel, process, script, and output.
+- the process succeeds wit* the correct input;
+- you locate `*pec_context_summary.txt`;
+- you ob*erve one controlled missing-input *rror;
+- you correct the path;
+- th* process succeeds again;
+- you can*explain input, channel, process, s*ript, and output.
 
-## Save a Git Checkpoint
+## Suggested Co*mit
 
-Inspect your work:
+After restoring the correct f*le, save the checkpoint with:
 
-```bash
-# Show the changed files.
-git status
+   *git add lessons/
+    git commit -m*"Complete process input lesson"
 
-# Show the exact changes made to the Lesson 2 workflow.
-git diff -- lessons/02_process_inputs.nf
-```
-
-Stage the completed workflow:
-
-```bash
-# Select the Lesson 2 workflow for the next Git checkpoint.
-git add lessons/02_process_inputs.nf
-```
-
-Save the staged change:
-
-```bash
-# Save the staged work with a message describing what was completed.
-git commit -m "Complete process input lesson"
-```
-
-Push the commit:
-
-```bash
-# Send the new commit to GitHub.
-git push
-```
-
-**Git key**
-
-- `git status`: show changed files;
-- `git diff`: show the exact changes;
-- `git add`: select changes for the next commit;
-- `git commit`: save the staged changes as a checkpoint;
-- `-m`: add a message explaining what the checkpoint accomplishes;
-- `git push`: send local commits to GitHub.
-
-Git records the filename. The commit message explains what the staged change
-accomplishes.
-
-## Next Lesson
+#* Next Lesson
 
 Continue with:
 
-```text
-lessons/03_channels_and_data_flow.md
-```
+    lessons/03_channels_and_data_flow.md
 
 The next lesson connects two processes so that the output of the first becomes
-the input of the second.
+the input of the second*
