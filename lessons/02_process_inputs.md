@@ -21,7 +21,7 @@ case.
 
 The file represents da*a that must enter a process.
 
-In t*e complete HealthSeq-NF workflow, *he inputs are larger scientific fi*es,
+In the complete HealthSeq-NF workflow, the inputs are larger scientific files,
 including paired FASTQ reads a*d a reference FASTA. The same unde*lying
 Nextflow concept applies.
 
@@ -100,7 +100,7 @@ Nextflow:
 2. created a*task directory under `work/`;
 3. s*aged the input file in that direct*ry;
 4. executed the process script*
-5. identified the declared output*
+5. identified the declared output;
 6. recorded the successful task.
 *## Input and Output Pattern
 
@@ -109,7 +109,7 @@ The l*sson follows this pattern:
     up*c_context.txt
     → SUMMARIZE_CONT*XT
     → upec_context_summary.txt
-*The complete HealthSeq-NF pipeline*uses the same pattern repeatedly:
+The complete HealthSeq-NF pipeline uses the same pattern repeatedly:
 *    paired FASTQ
     → FASTP
     →*trimmed paired FASTQ
@@ -129,7 +129,7 @@ Answer these ques*ions:
 2. What channel carries the f*le?
 3. What does `path context_fil*` mean?
 4. Where does Nextflow exe*ute the process?
-5. What output fi*e is declared?
+5. What output file is declared?
 6. How is this patt*rn similar to the FASTQ-processing*workflow?
 
 ## Controlled Input Err*r
@@ -162,7 +162,7 @@ This demons*rates an important troubleshooting*principle:
 
 ## Lesson Checkp*int
 
-You have completed this lesso* when:
+You have completed this lesson when:
 
 - the process succeeds wit* the correct input;
 - you locate `*pec_context_summary.txt`;
@@ -184,5 +184,5 @@ Continue with:
 
     lessons/03_channels_and_data_flow.md
 
-The next lesson connects two pro*esses so that the output of the fi*st becomes
+The next lesson connects two processes so that the output of the first becomes
 the input of the second*

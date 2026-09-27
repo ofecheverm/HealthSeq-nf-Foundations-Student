@@ -57,6 +57,7 @@ check_file lessons/03_channels_and_data_flow.nf
 check_file lessons/04_parameters.nf
 check_file lessons/05_small_pipeline.nf
 check_file exercises/FOUNDATIONS_EXERCISES.md
+check_file exercises/PAPER_CONNECTION.md
 
 echo
 

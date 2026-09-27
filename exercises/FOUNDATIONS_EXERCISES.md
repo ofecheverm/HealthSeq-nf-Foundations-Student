@@ -1,6 +1,8 @@
 # HealthSeq-NF Foundations Exercises
 
 ## Instructions
+\nAlso complete `exercises/PAPER_CONNECTION.md` to connect the workflow exercises to the published U13824 case.
+
 
 Complete these exercises after the corresponding lessons.
 
@@ -78,7 +80,7 @@ lessons/01_hello_nextflow.nf
 Run:
 
 ```bash
-nextflow run lessons/01_hello_nextflow.nf
+nextflow -C lessons/lesson.config run lessons/01_hello_nextflow.nf
 ```
 
 ### Questions

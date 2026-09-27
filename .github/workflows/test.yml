@@ -47,6 +47,7 @@ jobs:
           ./scripts/check_environment.sh
 
           test -s exercises/FOUNDATIONS_EXERCISES.md
+            exercises/PAPER_CONNECTION.md
           test ! -e exercises/FOUNDATIONS_ANSWER_KEY.md
           test ! -e docs/INSTRUCTOR_GUIDE.md
 
@@ -104,6 +105,7 @@ jobs:
             lessons/06_git_and_github.md
             lessons/07_prepare_for_applied.md
             exercises/FOUNDATIONS_EXERCISES.md
+            exercises/PAPER_CONNECTION.md
           )
 
           for file in "${required_files[@]}"; do
