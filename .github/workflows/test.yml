@@ -47,7 +47,7 @@ jobs:
           ./scripts/check_environment.sh
 
           test -s exercises/FOUNDATIONS_EXERCISES.md
-            exercises/PAPER_CONNECTION.md
+          test -s exercises/PAPER_CONNECTION.md
           test ! -e exercises/FOUNDATIONS_ANSWER_KEY.md
           test ! -e docs/INSTRUCTOR_GUIDE.md
 
