@@ -6,19 +6,22 @@ By the end of this lesson, you should be able to:
 
 - explain what a Nextflow parameter is;
 - identify a parameter default;
-- pass a parameter from the command line;
-- explain why parameters make workflows reusable;
-- distinguish changing a parameter from editing workflow code.
+- pass a parameter through a value channel;
+- override a parameter from the command line;
+- explain why parameters make workflows reusable.
 
 ## Why Parameters Matter
 
-A workflow should not require users to rewrite its source code every time an
-input, label, output directory, or configuration changes.
+Parameters let users change selected values without rewriting workflow code.
 
-Parameters allow users to control selected workflow values from the command
-line.
+Examples include:
 
-The same workflow can therefore be reused in different situations.
+- an input file;
+- a case label;
+- a reference genome;
+- an output directory.
+
+In this lesson, the parameter controls the teaching-case name.
 
 ## Open the Workflow
 
@@ -28,68 +31,95 @@ Open:
 lessons/04_parameters.nf
 ```
 
-Locate:
+The workflow contains three `STUDENT TASK` sections:
 
-```groovy
-params.case_name = 'U13824'
-```
+1. define the parameter;
+2. create a value channel;
+3. pass the channel to the process.
 
-This line defines a parameter named:
+## Student Task 1: Define the Parameter
+
+Define a parameter named:
 
 ```text
 case_name
 ```
 
-Its default value is:
+Give it this default value:
 
 ```text
 U13824
 ```
 
-## The Process Input
-
-The process receives:
+Use this pattern:
 
 ```groovy
+params.parameter_name = 'default value'
+```
+
+**Parameter key**
+
+- `params`: Nextflow's collection of workflow parameters;
+- `parameter_name`: the name used to access the parameter;
+- `'default value'`: the value used when the user provides no replacement.
+
+## The Process Input
+
+The process already contains:
+
+```groovy
+input:
 val case_name
 ```
 
-The `val` input declaration means the process receives a value rather than a
-file.
+**Input key**
 
-Earlier lessons used:
+- `val`: receive a value;
+- `case_name`: the name used for that value inside the process.
+
+Earlier lessons used `path` for files:
 
 ```groovy
 path context_file
 ```
 
-for a file input.
+This lesson uses `val` because `case_name` is text, not a file.
 
-Lesson 4 uses:
+## Student Task 2: Create a Value Channel
 
-```groovy
-val case_name
+Create a channel from:
+
+```text
+params.case_name
 ```
 
-for a text value.
-
-## The Value Channel
-
-The workflow creates a value channel:
+Use this pattern:
 
 ```groovy
-case_name_ch = Channel.value(params.case_name)
+channel_name = Channel.value(value)
 ```
 
-The channel carries the current value of the `case_name` parameter.
+**Channel key**
 
-The channel is passed into the process:
+- `Channel.value(...)`: create a channel containing one value;
+- `params.case_name`: retrieve the current parameter value;
+- `channel_name`: store the channel for use in the workflow.
+
+## Student Task 3: Call the Process
+
+Pass the value channel to:
+
+```text
+CREATE_PARAMETER_REPORT
+```
+
+Use this pattern:
 
 ```groovy
-CREATE_PARAMETER_REPORT(case_name_ch)
+PROCESS_NAME(channel_name)
 ```
 
-The data flow is:
+The completed data flow should be:
 
 ```text
 case_name parameter
@@ -100,39 +130,37 @@ case_name parameter
 
 ## Run with the Default Value
 
-From the repository root, run:
+After completing all three student tasks, run:
 
 ```bash
-nextflow -C lessons/lesson.config run lessons/04_parameters.nf
+# Run Lesson 4 with the default parameter value.
+nextflow -C lessons/lesson.config run \
+  lessons/04_parameters.nf
 ```
 
-The process should complete successfully:
+The process should complete with a label similar to:
 
 ```text
 CREATE_PARAMETER_REPORT (U13824)
 ```
 
-Locate the newest output:
+## Locate the Output
 
 ```bash
-parameter_report="$(
-  find work \
-    -name parameter_report.txt \
-    -type f \
-    -printf '%T@ %p\n' |
-  sort -rn |
-  head -n 1 |
-  cut -d' ' -f2-
-)"
+# Find the generated parameter report.
+find work \
+  -name parameter_report.txt \
+  -type f
 ```
 
-Display the report:
+## Display the Output
 
 ```bash
-cat "$parameter_report"
+# Display the first matching parameter report.
+cat "$(find work -name parameter_report.txt -type f | head -n 1)"
 ```
 
-Expected content includes:
+Expected content:
 
 ```text
 Teaching case: U13824
@@ -140,72 +168,84 @@ Teaching case: U13824
 
 ## Run with a Different Value
 
-Run the same workflow with a command-line parameter:
+Override the default parameter:
 
 ```bash
+# Run the same workflow with a different case-name value.
 nextflow -C lessons/lesson.config run \
   lessons/04_parameters.nf \
   --case_name "Published UPEC case"
 ```
 
-Locate the newest output again:
+**Command key**
+
+- `--case_name`: select the parameter to change;
+- `"Published UPEC case"`: provide the new value;
+- `--`: Nextflow parameters begin with two hyphens;
+- quotation marks keep the words together as one value.
+
+The workflow code remains unchanged. Only the parameter value changes.
+
+## Display the Custom Result
+
+Because several reports may now exist under `work/`, find the report containing
+the custom value:
 
 ```bash
-parameter_report="$(
-  find work \
-    -name parameter_report.txt \
-    -type f \
-    -printf '%T@ %p\n' |
-  sort -rn |
-  head -n 1 |
-  cut -d' ' -f2-
-)"
+# Search generated reports for the custom case name.
+grep -R -l \
+  "Teaching case: Published UPEC case" \
+  work
 ```
 
-Display it:
+**Command key**
+
+- `grep`: search inside files;
+- `-R`: search through directories and subdirectories;
+- `-l`: display only matching filenames;
+- `"..."`: the text to search for;
+- `work`: the directory to search.
+
+Save the first matching path and display the file:
 
 ```bash
+# Save the first matching report path.
+parameter_report="$(
+  grep -R -l \
+    "Teaching case: Published UPEC case" \
+    work |
+  head -n 1
+)"
+
+# Display the selected report.
 cat "$parameter_report"
 ```
 
-The report should now include:
+Expected content:
 
 ```text
 Teaching case: Published UPEC case
 ```
 
-The workflow source code did not change.
+## Parameter Versus Code Change
 
-Only the parameter value changed.
+Use a parameter when changing a value that the workflow is designed to accept.
 
-## Command Structure
+Examples include:
 
-The command is:
+- a case label;
+- an input sample sheet;
+- a reference file;
+- an output directory.
 
-```bash
-nextflow -C lessons/lesson.config run \
-  lessons/04_parameters.nf \
-  --case_name "Published UPEC case"
-```
+Edit the workflow code when changing the workflow's logic or structure.
 
-The parts are:
+For beginners, changing a documented parameter is usually safer than changing
+a process command.
 
-- `nextflow`: start Nextflow;
-- `-C lessons/lesson.config`: use the small lesson configuration;
-- `run`: execute a workflow;
-- `lessons/04_parameters.nf`: identify the workflow file;
-- `--case_name`: select the parameter;
-- `"Published UPEC case"`: provide the parameter value.
+## Connection to HealthSeq-NF Applied
 
-Nextflow parameters use two hyphens:
-
-```text
---case_name
-```
-
-## Connection to HealthSeq-NF
-
-The complete HealthSeq-NF workflow uses parameters such as:
+HealthSeq-NF Applied uses parameters such as:
 
 ```text
 --input
@@ -217,12 +257,19 @@ The complete HealthSeq-NF workflow uses parameters such as:
 For example:
 
 ```bash
-nextflow run the complete applied workflow file \
+# Run the Applied workflow with a custom output directory.
+nextflow run main.nf \
   -profile test \
   --outdir student_results
 ```
 
-This command changes the output location without editing the complete applied workflow file.
+This command belongs to the separate HealthSeq-NF Applied repository.
+
+**Applied command key**
+
+- `-profile test`: select the validated teaching profile;
+- `--outdir`: select the output-directory parameter;
+- `student_results`: provide the new output-directory name.
 
 Parameters make workflows easier to:
 
@@ -233,24 +280,6 @@ Parameters make workflows easier to:
 - automate;
 - adapt safely.
 
-## Parameter Versus Source-Code Change
-
-Use a parameter when the workflow already exposes a value that users are
-expected to change.
-
-Examples include:
-
-- an input sample sheet;
-- a reference FASTA;
-- an output directory;
-- a case label.
-
-Edit workflow source code only when changing the workflow's analytical logic
-or structure.
-
-For beginners, changing a documented parameter is usually safer than changing
-a process command.
-
 ## Check Your Understanding
 
 Answer these questions:
@@ -260,31 +289,44 @@ Answer these questions:
 3. What type of process input receives the value?
 4. What channel carries the parameter?
 5. How do you override the default from the command line?
-6. Did changing the parameter require editing the workflow file?
-7. Which HealthSeq-NF parameter controls the output directory?
-8. Why do parameters improve reproducibility?
+6. Did changing the parameter require editing the process?
+7. Why do parameters improve reproducibility?
+
+Record your answers in:
+
+```text
+exercises/FOUNDATIONS_EXERCISES.md
+```
 
 ## Controlled Parameter Experiment
 
-Run:
+Run the workflow with your own label:
 
 ```bash
+# Override case_name with a new value.
 nextflow -C lessons/lesson.config run \
   lessons/04_parameters.nf \
   --case_name "My reproducible workflow"
 ```
 
-Locate and display the newest report.
-
-Confirm that the report includes the new value.
-
-Then run the default workflow again:
+Search for the result:
 
 ```bash
-nextflow -C lessons/lesson.config run lessons/04_parameters.nf
+# Find the report containing your custom value.
+grep -R -l \
+  "Teaching case: My reproducible workflow" \
+  work
 ```
 
-Confirm that the default value remains:
+Run the workflow again without `--case_name`:
+
+```bash
+# Run the workflow with its default parameter value.
+nextflow -C lessons/lesson.config run \
+  lessons/04_parameters.nf
+```
+
+The default remains:
 
 ```text
 U13824
@@ -294,27 +336,56 @@ U13824
 
 You have completed this lesson when:
 
-- the default workflow run succeeds;
-- the report contains `U13824`;
-- the custom-parameter run succeeds;
-- the report contains the custom value;
-- the workflow file remains unchanged;
+- all three `STUDENT TASK` sections are complete;
+- the default workflow succeeds;
+- the default report contains `U13824`;
+- the custom-parameter workflow succeeds;
+- the custom report contains the new value;
 - you can explain the difference between `path` and `val`;
 - you can explain why parameters make workflows reusable.
 
-## Suggested Personal Commit
+## Save a Git Checkpoint
 
-After completing the experiment, participants may record the checkpoint with:
+Inspect your work:
 
 ```bash
+# Show the changed files.
 git status
-git add lessons/
-git commit -m "Complete parameter lesson"
+
+# Show the Lesson 4 workflow changes.
+git diff -- lessons/04_parameters.nf
+```
+
+Stage the completed workflow:
+
+```bash
+# Select the Lesson 4 workflow for the next checkpoint.
+git add lessons/04_parameters.nf
+```
+
+Save the checkpoint:
+
+```bash
+# Save the staged work with a message describing what was completed.
+git commit -m "Add configurable workflow parameter"
+```
+
+Push the commit:
+
+```bash
+# Send the new commit to GitHub.
 git push
 ```
 
-Only commit intentional source or documentation changes. Do not commit files
-under `work/`.
+**Git key**
+
+- `git add`: select the workflow change for the checkpoint;
+- `git commit`: save the staged change;
+- `-m`: add a message describing what the checkpoint accomplishes;
+- `git push`: send the commit to GitHub.
+
+Git records the filename. The commit message explains what the staged change
+accomplishes.
 
 ## Next Lesson
 
@@ -325,4 +396,4 @@ lessons/05_small_pipeline.md
 ```
 
 The next lesson combines file inputs, parameters, channels, and multiple
-processes into one small reusable pipeline.
+processes in one reusable pipeline.
