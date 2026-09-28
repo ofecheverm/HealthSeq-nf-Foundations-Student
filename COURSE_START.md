@@ -132,17 +132,33 @@ A terminal line ending with `$` is waiting for a command.
 
 Do not type the `$` symbol shown in terminal examples.
 
+## How to Read Terminal Commands
+
+Lines beginning with `#` are short explanations. Bash ignores these comment
+lines, so you can copy and paste the complete command block.
+
+For example:
+
+```bash
+# Show the directory currently used by the terminal.
+pwd
+```
+
+The terminal ignores the comment and runs `pwd`.
+
 ## Step 5: Practice Essential Terminal Commands
 
 Show your current location:
 
 ```bash
+# Show the directory currently used by the terminal.
 pwd
 ```
 
 List repository files:
 
 ```bash
+# List files and directories in the current location.
 ls
 ```
 
@@ -160,32 +176,46 @@ scripts
 Display the lesson input:
 
 ```bash
+# Display the contents of the teaching-case input file.
 cat lessons/upec_context.txt
 ```
 
 Enter the lessons directory:
 
 ```bash
+# Move into the lessons directory.
 cd lessons
 ```
 
 List its contents:
 
 ```bash
+# List files inside the lessons directory.
 ls
 ```
 
 Return to the repository root:
 
 ```bash
+# Return to the directory one level above lessons/.
 cd ..
 ```
 
 Check the Git repository:
 
 ```bash
+# Show the current branch and any changed files.
 git status
 ```
+
+### Terminal Command Key
+
+- `pwd`: show the current directory;
+- `ls`: list files and directories;
+- `cat`: display the contents of a file;
+- `cd`: move to another directory;
+- `..`: refer to the directory one level above;
+- `git status`: show the current branch and changed files.
 
 The initial repository should normally report:
 
@@ -193,16 +223,24 @@ The initial repository should normally report:
 nothing to commit, working tree clean
 ```
 
+This means Git does not detect any uncommitted changes.
+
 ## Step 6: Verify the Environment
 
 Run:
 
 ```bash
+# Check that the required tools and course files are available.
 ./scripts/check_environment.sh
 ```
 
 The script checks that Git, Java, Nextflow, and the required project files are
 available.
+
+### Script Key
+
+- `./`: use a file from the current directory;
+- `scripts/check_environment.sh`: the environment-checking script.
 
 The final line should be:
 
@@ -223,21 +261,41 @@ lessons/01_first_nextflow.md
 Run:
 
 ```bash
+# Run Lesson 1 with the course configuration.
 nextflow -C lessons/lesson.config run \
   lessons/01_hello_nextflow.nf
 ```
+
+### Nextflow Command Key
+
+- `nextflow`: start the Nextflow program;
+- `-C`: load a configuration file;
+- `lessons/lesson.config`: the course configuration;
+- `run`: execute a workflow;
+- `lessons/01_hello_nextflow.nf`: the workflow file;
+- `\`: continue the same command on the next line.
 
 The `SAY_HELLO` process should finish successfully.
 
 Locate its output:
 
 ```bash
+# Find the generated Lesson 1 output file.
 find work -name hello_nextflow.txt -type f
 ```
+
+### Find Command Key
+
+- `find`: search for files;
+- `work`: the directory to search;
+- `-name`: search for a specific filename;
+- `hello_nextflow.txt`: the filename to find;
+- `-type f`: return regular files only.
 
 Display the output:
 
 ```bash
+# Save the first matching output path in hello_file.
 hello_file="$(
   find work \
     -name hello_nextflow.txt \
@@ -245,8 +303,18 @@ hello_file="$(
   head -n 1
 )"
 
+# Display the file stored in hello_file.
 cat "$hello_file"
 ```
+
+### Output Command Key
+
+- `hello_file=`: create a shell variable named `hello_file`;
+- `$(...)`: run the commands inside and store the result;
+- `|`: pass one command's result to the next command;
+- `head -n 1`: keep only the first result;
+- `$hello_file`: retrieve the value stored in the variable;
+- `cat`: display the contents of a file.
 
 Expected result:
 
@@ -356,33 +424,62 @@ Describe one way you could extend the project.
 Before committing, inspect your work:
 
 ```bash
+# Show changed files.
 git status
+
+# Show the exact unstaged changes.
 git diff
 ```
 
 Stage only the files you intentionally changed:
 
 ```bash
+# Replace <file> with the path of the file you want to stage.
 git add <file>
+```
+
+For example:
+
+```bash
+# Select the completed Lesson 2 workflow for the next checkpoint.
+git add lessons/02_process_inputs.nf
 ```
 
 Review the staged changes:
 
 ```bash
+# Show the changes selected for the next checkpoint.
 git diff --cached
 ```
 
 Commit:
 
 ```bash
-git commit -m "Describe the completed change"
+# Save the staged changes as a Git checkpoint.
+git commit -m "Complete process input lesson"
 ```
+
+The words inside quotation marks are the **commit message**.
+
+Git already records the filenames. The commit message explains what the staged
+changes accomplish.
 
 Push:
 
 ```bash
+# Send the new commit to GitHub.
 git push
 ```
+
+### Git Command Key
+
+- `git status`: show changed files;
+- `git diff`: show unstaged changes;
+- `git add`: select changes for the next checkpoint;
+- `git diff --cached`: show staged changes;
+- `git commit`: save the staged changes as a checkpoint;
+- `-m`: add a message describing what the checkpoint accomplishes;
+- `git push`: send commits to GitHub.
 
 Suggested project commits include:
 

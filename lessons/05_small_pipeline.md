@@ -57,6 +57,13 @@ The process creates `case_summary.txt` and emits the named output channel:
 CREATE_CASE_SUMMARY.out.summary
 ```
 
+**Nextflow key**
+
+- `path context_file`: receive a file;
+- `val case_name`: receive a value;
+- `emit: summary`: name the output channel `summary`;
+- `.out.summary`: access the named output from the process.
+
 ## Process 2: Add an Evidence Boundary
 
 The second process receives the first process output.
@@ -72,6 +79,11 @@ The process emits:
 ADD_EVIDENCE_BOUNDARY.out.bounded_report
 ```
 
+**Output key**
+
+- `emit: bounded_report`: name the output channel `bounded_report`;
+- `.out.bounded_report`: access the named output from the process.
+
 ## Process 3: Publish the Final Report
 
 The third process receives the bounded report and creates:
@@ -86,6 +98,12 @@ The process uses:
 publishDir params.lesson_outdir, mode: 'copy'
 ```
 
+**Publication key**
+
+- `publishDir`: copy selected outputs to a user-facing directory;
+- `params.lesson_outdir`: use the output directory selected by the parameter;
+- `mode: 'copy'`: copy the file instead of creating a link.
+
 Nextflow executes the task under `work/`, then copies the declared final output
 to the selected lesson output directory.
 
@@ -94,8 +112,17 @@ to the selected lesson output directory.
 From the repository root, run:
 
 ```bash
+# Run Lesson 5 with the course configuration.
 nextflow -C lessons/lesson.config run lessons/05_small_pipeline.nf
 ```
+
+**Command key**
+
+- `nextflow`: start Nextflow;
+- `-C`: load a configuration file;
+- `lessons/lesson.config`: the course configuration;
+- `run`: execute the workflow;
+- `lessons/05_small_pipeline.nf`: the workflow file.
 
 Expected processes:
 
@@ -110,8 +137,15 @@ All three processes should complete successfully.
 Display the published report:
 
 ```bash
+# Display the final report from the default output directory.
 cat lessons/outputs/lesson5_final_report.txt
 ```
+
+**Command key**
+
+- `cat`: display a file;
+- `lessons/outputs/`: the default published-output directory;
+- `lesson5_final_report.txt`: the final report.
 
 The report should contain:
 
@@ -125,15 +159,25 @@ The report should contain:
 Run:
 
 ```bash
+# Run Lesson 5 with a custom case name and output directory.
 nextflow -C lessons/lesson.config run \
   lessons/05_small_pipeline.nf \
   --case_name "My UPEC learning case" \
   --lesson_outdir lessons/custom_outputs
 ```
 
+**Parameter key**
+
+- `--case_name`: change the case-name parameter;
+- `"My UPEC learning case"`: provide the custom case name;
+- `--lesson_outdir`: change the published-output directory;
+- `lessons/custom_outputs`: provide the custom directory;
+- `\`: continue the same command on the next line.
+
 Display the custom report:
 
 ```bash
+# Display the report from the custom output directory.
 cat lessons/custom_outputs/lesson5_final_report.txt
 ```
 

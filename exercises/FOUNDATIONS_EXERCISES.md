@@ -1,8 +1,9 @@
 # HealthSeq-NF Foundations Exercises
 
 ## Instructions
-\nAlso complete `exercises/PAPER_CONNECTION.md` to connect the workflow exercises to the published U13824 case.
 
+Also complete `exercises/PAPER_CONNECTION.md` to connect the workflow exercises
+to the published U13824 case.
 
 Complete these exercises after the corresponding lessons.
 
@@ -20,6 +21,7 @@ committed.
 Run:
 
 ```bash
+# Show the directory currently used by the terminal.
 pwd
 ```
 
@@ -34,6 +36,7 @@ Answer:
 Run:
 
 ```bash
+# List files and directories in the current location.
 ls
 ```
 
@@ -50,6 +53,7 @@ Name three files or directories visible in the repository:
 Run:
 
 ```bash
+# Show the current branch and changed files.
 git status
 ```
 
@@ -80,6 +84,7 @@ lessons/01_hello_nextflow.nf
 Run:
 
 ```bash
+# Run the complete Lesson 1 workflow.
 nextflow -C lessons/lesson.config run lessons/01_hello_nextflow.nf
 ```
 
@@ -126,6 +131,7 @@ lessons/02_process_inputs.nf
 Run:
 
 ```bash
+# Run Lesson 2 after completing its STUDENT TASK sections.
 nextflow -C lessons/lesson.config run lessons/02_process_inputs.nf
 ```
 
@@ -190,6 +196,7 @@ lessons/03_channels_and_data_flow.nf
 Run:
 
 ```bash
+# Run Lesson 3 after completing the process connection.
 nextflow -C lessons/lesson.config run \
   lessons/03_channels_and_data_flow.nf
 ```
@@ -247,12 +254,14 @@ lessons/04_parameters.nf
 Run the default workflow:
 
 ```bash
+# Run Lesson 4 with the default parameter value.
 nextflow -C lessons/lesson.config run lessons/04_parameters.nf
 ```
 
 Run it again with:
 
 ```bash
+# Run Lesson 4 with a custom case_name value.
 nextflow -C lessons/lesson.config run \
   lessons/04_parameters.nf \
   --case_name "My reproducible case"
@@ -301,6 +310,7 @@ lessons/05_small_pipeline.nf
 Run:
 
 ```bash
+# Run Lesson 5 after completing its STUDENT TASK sections.
 nextflow -C lessons/lesson.config run lessons/05_small_pipeline.nf
 ```
 
@@ -354,6 +364,7 @@ Answer:
 Run:
 
 ```bash
+# Run Lesson 5 with a custom case name and output directory.
 nextflow -C lessons/lesson.config run \
   lessons/05_small_pipeline.nf \
   --case_name "My course pipeline" \
@@ -431,13 +442,35 @@ MY_PROGRESS.md
 Then run:
 
 ```bash
+# Show the progress-file changes.
 git status
 git diff -- MY_PROGRESS.md
+
+# Select MY_PROGRESS.md for the next checkpoint.
 git add MY_PROGRESS.md
+
+# Review the changes selected for the checkpoint.
 git diff --cached
+
+# Save the staged work with a descriptive commit message.
 git commit -m "Document beginner Nextflow progress"
+
+# Send the commit to GitHub.
 git push
 ```
+
+**Git key**
+
+- `git status`: show changed files;
+- `git diff`: show unstaged changes;
+- `git add`: select changes for the next commit;
+- `git diff --cached`: review staged changes;
+- `git commit`: save the staged changes;
+- `-m`: add a message describing what the commit accomplishes;
+- `git push`: send local commits to GitHub.
+
+Git records that `MY_PROGRESS.md` is included. The commit message describes
+what the staged work accomplishes.
 
 ### Questions
 

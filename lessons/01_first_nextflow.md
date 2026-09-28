@@ -15,21 +15,36 @@ By the end of this lesson, you should be able to:
 
 Open:
 
-    lessons/01_hello_nextflow.nf
+```text
+lessons/01_hello_nextflow.nf
+```
 
 The file contains one process named:
 
-    SAY_HELLO
+```text
+SAY_HELLO
+```
 
 A process represents one reproducible task.
 
 The process executes this shell command:
 
-    echo "Hello from Nextflow" > hello_nextflow.txt
+```bash
+# Write the message into hello_nextflow.txt.
+echo "Hello from Nextflow" > hello_nextflow.txt
+```
+
+**Command key**
+
+- `echo`: produce text;
+- `>`: write the text into a file;
+- `hello_nextflow.txt`: the file created by the command.
 
 The command creates a text file named:
 
-    hello_nextflow.txt
+```text
+hello_nextflow.txt
+```
 
 The workflow block tells Nextflow to run the process.
 
@@ -37,13 +52,18 @@ The workflow block tells Nextflow to run the process.
 
 From the repository root, run:
 
-    nextflow run lessons/01_hello_nextflow.nf
+```bash
+# Run the Lesson 1 workflow.
+nextflow run lessons/01_hello_nextflow.nf
+```
 
 You should see a process named `SAY_HELLO` complete successfully.
 
 A typical process line looks similar to:
 
-    SAY_HELLO | 1 of 1 ✔
+```text
+SAY_HELLO | 1 of 1 ✔
+```
 
 The exact task identifier and run name may differ.
 
@@ -51,39 +71,75 @@ The exact task identifier and run name may differ.
 
 The command has three principal parts:
 
-    nextflow run lessons/01_hello_nextflow.nf
+```bash
+# Run the workflow stored in lessons/01_hello_nextflow.nf.
+nextflow run lessons/01_hello_nextflow.nf
+```
 
-- `nextflow` starts the Nextflow program.
-- `run` means execute a workflow.
-- `lessons/01_hello_nextflow.nf` identifies the workflow file.
+**Command key**
 
-This is the same pattern used later for HealthSeq-NF:
+- `nextflow`: start the Nextflow program;
+- `run`: execute a workflow;
+- `lessons/01_hello_nextflow.nf`: identify the workflow file.
 
-    the validated command documented in the applied repository
+This is the same pattern used later for HealthSeq-NF Applied:
+
+```text
+nextflow run main.nf -profile test
+```
+
+That command belongs to the separate Applied repository.
 
 ## Find the Output
 
 Nextflow executes each process inside a task directory under:
 
-    work/
+```text
+work/
+```
 
 After the workflow finishes, Nextflow displays a task identifier such as:
 
-    [a1/b2c3d4]
+```text
+[a1/b2c3d4]
+```
 
 The first two characters identify the first part of the work-directory path.
 
 To locate the lesson output automatically, run:
 
-    find work -name hello_nextflow.txt -type f
+```bash
+# Search under work/ for hello_nextflow.txt.
+find work -name hello_nextflow.txt -type f
+```
+
+**Command key**
+
+- `find`: search for files;
+- `work`: the directory to search;
+- `-name`: search by filename;
+- `hello_nextflow.txt`: the filename to find;
+- `-type f`: return regular files only.
 
 Display the file:
 
-    cat "$(find work -name hello_nextflow.txt -type f | head -n 1)"
+```bash
+# Display the first matching output file.
+cat "$(find work -name hello_nextflow.txt -type f | head -n 1)"
+```
+
+**Command key**
+
+- `cat`: display a file;
+- `$(...)`: run the command inside and use its result;
+- `|`: pass the result to the next command;
+- `head -n 1`: keep only the first result.
 
 Expected content:
 
-    Hello from Nextflow
+```text
+Hello from Nextflow
+```
 
 ## Why Is the File Under `work/`?
 
@@ -105,28 +161,37 @@ GitHub.
 
 ### Process Name
 
-    process SAY_HELLO
+```groovy
+process SAY_HELLO
+```
 
 The process name identifies the task in the Nextflow execution display.
 
 ### Output
 
-    path "hello_nextflow.txt"
+```groovy
+path "hello_nextflow.txt"
+```
 
 The output declaration tells Nextflow which generated file belongs to the
 process output.
 
 ### Script
 
-    echo "Hello from Nextflow" > hello_nextflow.txt
+```bash
+# Write the message into the declared output file.
+echo "Hello from Nextflow" > hello_nextflow.txt
+```
 
 The script contains the command executed by the process.
 
 ### Workflow
 
-    workflow {
-        SAY_HELLO()
-    }
+```groovy
+workflow {
+    SAY_HELLO()
+}
+```
 
 The workflow block calls the process.
 
@@ -159,23 +224,35 @@ Answer these questions before continuing:
 
 Open:
 
-    lessons/01_hello_nextflow.nf
+```text
+lessons/01_hello_nextflow.nf
+```
 
 Change:
 
-    Hello from Nextflow
+```text
+Hello from Nextflow
+```
 
 to a short professional message, for example:
 
-    My first reproducible Nextflow process
+```text
+My first reproducible Nextflow process
+```
 
 Run the workflow again:
 
-    nextflow run lessons/01_hello_nextflow.nf
+```bash
+# Run the workflow after changing the message.
+nextflow run lessons/01_hello_nextflow.nf
+```
 
 Locate and display the newest output:
 
-    find work -name hello_nextflow.txt -type f
+```bash
+# Find the generated output files.
+find work -name hello_nextflow.txt -type f
+```
 
 This small edit demonstrates that changing the process script changes the
 generated output.
@@ -184,7 +261,9 @@ generated output.
 
 Before continuing, restore the original sentence:
 
-    Hello from Nextflow
+```text
+Hello from Nextflow
+```
 
 Save the file.
 
@@ -201,7 +280,9 @@ You have completed this lesson when:
 
 Continue with:
 
-    lessons/02_process_inputs.md
+```text
+lessons/02_process_inputs.md
+```
 
 The next lesson introduces an input file and shows how Nextflow stages that
 file for a process.

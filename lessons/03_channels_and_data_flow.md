@@ -62,6 +62,12 @@ The output can therefore be referenced as:
 CREATE_CASE_REPORT.out.report
 ```
 
+**Nextflow key**
+
+- `path context_file`: receive a file;
+- `emit: report`: name the output channel `report`;
+- `.out.report`: access the named output from the process.
+
 ## Process 2
 
 `ADD_REPRODUCIBILITY_NOTE` receives:
@@ -87,9 +93,19 @@ This is data-driven execution.
 From the repository root, run:
 
 ```bash
+# Run Lesson 3 with the course configuration.
 nextflow -C lessons/lesson.config run \
   lessons/03_channels_and_data_flow.nf
 ```
+
+**Command key**
+
+- `nextflow`: start Nextflow;
+- `-C`: load a configuration file;
+- `lessons/lesson.config`: the course configuration;
+- `run`: execute the workflow;
+- `lessons/03_channels_and_data_flow.nf`: the workflow file;
+- `\`: continue the command on the next line.
 
 Both processes should complete successfully:
 
@@ -103,12 +119,22 @@ ADD_REPRODUCIBILITY_NOTE (final report)
 Run:
 
 ```bash
+# Find the final report under work/.
 find work -name upec_final_report.txt -type f
 ```
+
+**Command key**
+
+- `find`: search for files;
+- `work`: the directory to search;
+- `-name`: search by filename;
+- `upec_final_report.txt`: the filename to find;
+- `-type f`: return regular files only.
 
 Display the newest report:
 
 ```bash
+# Find the newest report and save its path in final_report.
 final_report="$(
   find work \
     -name upec_final_report.txt \
@@ -119,8 +145,20 @@ final_report="$(
   cut -d' ' -f2-
 )"
 
+# Display the file stored in final_report.
 cat "$final_report"
 ```
+
+**Output command key**
+
+- `final_report=`: create a shell variable;
+- `$(...)`: run the enclosed commands and store the result;
+- `-printf '%T@ %p\n'`: print the modification time and file path;
+- `|`: pass one command's result to the next command;
+- `sort -rn`: sort newest results first;
+- `head -n 1`: keep the first result;
+- `cut -d' ' -f2-`: remove the timestamp and keep the file path;
+- `cat`: display the selected file.
 
 The report should include:
 
@@ -216,6 +254,7 @@ CREATE_CASE_REPORT.out.missing_report
 Run the lesson again:
 
 ```bash
+# Run Lesson 3 with the incorrect output-channel name.
 nextflow -C lessons/lesson.config run \
   lessons/03_channels_and_data_flow.nf
 ```
@@ -228,7 +267,13 @@ Restore:
 CREATE_CASE_REPORT.out.report
 ```
 
-Run the workflow again and confirm that both processes succeed.
+Run the workflow again and confirm that both processes succeed:
+
+```bash
+# Run Lesson 3 again after restoring the correct connection.
+nextflow -C lessons/lesson.config run \
+  lessons/03_channels_and_data_flow.nf
+```
 
 ## Troubleshooting Principle
 
@@ -258,5 +303,5 @@ Continue with:
 lessons/04_parameters.md
 ```
 
-The next lesson introduces parameters so that a workflow can be reused
-without rewriting its process code.
+The next lesson introduces parameters so that a workflow can be reused without
+rewriting its process code.
