@@ -31,15 +31,32 @@ Identify:
 Run the pipeline:
 
 ```bash
+# Run the reusable pipeline with the course configuration.
 nextflow -C lessons/lesson.config run \
   lessons/05_small_pipeline.nf
 ```
 
+**Command key**
+
+- `nextflow`: start Nextflow;
+- `-C`: load a configuration file;
+- `lessons/lesson.config`: the course configuration;
+- `run`: execute the workflow;
+- `lessons/05_small_pipeline.nf`: the workflow file;
+- `\`: continue the command on the next line.
+
 Display the published report:
 
 ```bash
+# Display the final report published outside work/.
 cat lessons/outputs/lesson5_final_report.txt
 ```
+
+**Command key**
+
+- `cat`: display the contents of a file;
+- `lessons/outputs/`: the published-output directory;
+- `lesson5_final_report.txt`: the final report.
 
 ## Explain the Data Flow
 
@@ -78,7 +95,7 @@ Confirm that you can:
 
 The project demonstrates reproducible workflow design.
 
-The foundations examples do not independently:
+The Foundations examples do not independently:
 
 - identify antimicrobial-resistance genes;
 - confirm ESBL production;
@@ -86,7 +103,7 @@ The foundations examples do not independently:
 - recommend treatment;
 - provide clinical decision support.
 
-The U13824 case provides scientific context. The foundations workflows operate
+The U13824 case provides scientific context. The Foundations workflows operate
 on small text files rather than sequencing data.
 
 ## Choose an Extension
@@ -146,33 +163,53 @@ Describe one realistic next step for the project.
 Review your changes:
 
 ```bash
+# Show changed files.
 git status
+
+# Show the exact unstaged changes.
 git diff
 ```
 
 Stage only the files you intentionally changed:
 
 ```bash
+# Select the progress file for the final checkpoint.
 git add MY_PROGRESS.md
 ```
 
 Review the staged change:
 
 ```bash
+# Show the changes selected for the final checkpoint.
 git diff --cached
 ```
 
 Commit:
 
 ```bash
+# Save the staged work as a Git checkpoint.
 git commit -m "Complete Nextflow foundations project"
 ```
+
+The commit message describes what the staged changes accomplish. Git already
+records which files are included.
 
 Push:
 
 ```bash
+# Send the final commit to GitHub.
 git push
 ```
+
+**Git key**
+
+- `git status`: show changed files;
+- `git diff`: show unstaged changes;
+- `git add`: select changes for the next checkpoint;
+- `git diff --cached`: review staged changes;
+- `git commit`: save the staged changes;
+- `-m`: add a message describing what the checkpoint accomplishes;
+- `git push`: send local commits to GitHub.
 
 ## Further Application
 

@@ -59,20 +59,45 @@ edit a file
 The corresponding commands are:
 
 ```bash
+# Inspect the repository and its changes.
 git status
 git diff
+
+# Select a file for the next checkpoint.
 git add <file>
-git commit -m "Describe the change"
+
+# Save the staged changes with a descriptive message.
+git commit -m "Describe what the staged changes accomplish"
+
+# Send the commit to GitHub.
 git push
 ```
+
+**Git key**
+
+- `git status`: show the current branch and changed files;
+- `git diff`: show changes that are not staged;
+- `git add`: select changes for the next commit;
+- `git commit`: save the staged changes as a checkpoint;
+- `-m`: add a message describing what the checkpoint accomplishes;
+- `git push`: send local commits to GitHub.
+
+Git records which files are included. The commit message explains what the
+staged changes accomplish.
 
 ## Step 1: Check the Current Branch
 
 Run:
 
 ```bash
+# Show the name of the current Git branch.
 git branch --show-current
 ```
+
+**Command key**
+
+- `git branch`: work with Git branches;
+- `--show-current`: display only the current branch name.
 
 The branch identifies the current line of development.
 
@@ -84,6 +109,7 @@ default branch of your personal repository.
 Run:
 
 ```bash
+# Show the current branch and repository changes.
 git status
 ```
 
@@ -95,8 +121,8 @@ nothing to commit, working tree clean
 
 This means Git does not detect any unsaved source or documentation changes.
 
-Generated outputs under `work/` and the applied workflow output directories are excluded from Git and should
-not normally appear.
+Generated outputs under `work/` and the Applied workflow output directories are
+excluded from Git and should not normally appear.
 
 ## Step 3: Create a Personal Progress File
 
@@ -111,7 +137,7 @@ In the Explorer:
 1. select the **New File** button;
 2. enter `MY_PROGRESS.md`;
 3. paste the template below;
-4. replace the bracketed instructions with your own short answers.
+4. replace the instructions with your own short answers.
 
 ```markdown
 # My HealthSeq-NF Progress
@@ -152,8 +178,15 @@ instructor's explanation.
 Run:
 
 ```bash
+# Show a short summary of changed and untracked files.
 git status --short
 ```
+
+**Command key**
+
+- `--short`: display a compact status;
+- `??`: identify an untracked file;
+- `A`: identify a file staged as newly added.
 
 You should see:
 
@@ -167,6 +200,7 @@ has not yet been selected for a commit.
 Display the file:
 
 ```bash
+# Display the progress file in the terminal.
 cat MY_PROGRESS.md
 ```
 
@@ -177,12 +211,14 @@ Review the content before saving it in Git history.
 Run:
 
 ```bash
+# Select MY_PROGRESS.md for the next commit.
 git add MY_PROGRESS.md
 ```
 
 Check the status:
 
 ```bash
+# Confirm that the file is staged.
 git status --short
 ```
 
@@ -201,8 +237,14 @@ The staging area contains the changes selected for the next commit.
 Run:
 
 ```bash
+# Display the changes selected for the next commit.
 git diff --cached
 ```
+
+**Command key**
+
+- `git diff`: display differences;
+- `--cached`: show changes currently in the staging area.
 
 Read the displayed content.
 
@@ -218,10 +260,19 @@ Before committing, confirm that:
 Run:
 
 ```bash
+# Save the staged progress file as a Git checkpoint.
 git commit -m "Document beginner Nextflow progress"
 ```
 
-A commit message should describe the completed change.
+**Command key**
+
+- `git commit`: save the staged changes;
+- `-m`: provide the commit message;
+- `"Document beginner Nextflow progress"`: describe what the checkpoint
+  accomplishes.
+
+Git already records that `MY_PROGRESS.md` is included. The message describes
+the purpose of the staged change rather than repeating the filename.
 
 Good commit messages include:
 
@@ -246,8 +297,15 @@ final
 Run:
 
 ```bash
+# Display the three most recent commits in a compact format.
 git log -3 --oneline
 ```
+
+**Command key**
+
+- `git log`: display commit history;
+- `-3`: show the three most recent commits;
+- `--oneline`: show each commit on one line.
 
 Your new commit should appear at the top.
 
@@ -261,14 +319,23 @@ Each line includes:
 Run:
 
 ```bash
+# Send local commits to the connected GitHub branch.
 git push
 ```
 
 If Git reports that the branch has no upstream, use:
 
 ```bash
+# Connect the current local branch to origin and push it.
 git push -u origin "$(git branch --show-current)"
 ```
+
+**Command key**
+
+- `-u`: remember the connection between the local and remote branches;
+- `origin`: the usual name of the remote GitHub repository;
+- `$(...)`: run a command and use its result;
+- `git branch --show-current`: provide the current branch name.
 
 Pushing sends the local commit to the remote repository on GitHub.
 
@@ -298,7 +365,7 @@ Commit:
 Do not commit:
 
 - `work/`;
-- the applied workflow output directories;
+- the Applied workflow output directories;
 - `.nextflow/`;
 - Nextflow log files;
 - passwords;
@@ -382,6 +449,7 @@ git push --force
 Start troubleshooting with:
 
 ```bash
+# Show the branch and repository state before taking another action.
 git status
 ```
 
@@ -419,5 +487,5 @@ Continue with:
 lessons/07_prepare_for_applied.md
 ```
 
-The next lesson reviews the Nextflow foundations and prepares you for the
-larger scientific projects using the same Nextflow principles.
+The next lesson reviews the Nextflow foundations and prepares you for larger
+scientific projects using the same Nextflow principles.

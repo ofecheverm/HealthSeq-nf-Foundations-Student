@@ -46,6 +46,12 @@ Its default value is:
 U13824
 ```
 
+**Parameter key**
+
+- `params`: Nextflow's collection of workflow parameters;
+- `case_name`: the parameter name;
+- `'U13824'`: the default value.
+
 ## The Process Input
 
 The process receives:
@@ -73,6 +79,12 @@ val case_name
 
 for a text value.
 
+**Input key**
+
+- `path`: receive a file;
+- `val`: receive a value;
+- `case_name`: the name used for the value inside the process.
+
 ## The Value Channel
 
 The workflow creates a value channel:
@@ -89,6 +101,13 @@ The channel is passed into the process:
 CREATE_PARAMETER_REPORT(case_name_ch)
 ```
 
+**Channel key**
+
+- `Channel.value(...)`: create a channel containing one value;
+- `params.case_name`: retrieve the current parameter value;
+- `case_name_ch`: the variable storing the value channel;
+- `CREATE_PARAMETER_REPORT(...)`: send the channel to the process.
+
 The data flow is:
 
 ```text
@@ -103,6 +122,7 @@ case_name parameter
 From the repository root, run:
 
 ```bash
+# Run Lesson 4 with the default parameter value.
 nextflow -C lessons/lesson.config run lessons/04_parameters.nf
 ```
 
@@ -115,6 +135,7 @@ CREATE_PARAMETER_REPORT (U13824)
 Locate the newest output:
 
 ```bash
+# Find the newest parameter report and save its path.
 parameter_report="$(
   find work \
     -name parameter_report.txt \
@@ -129,8 +150,21 @@ parameter_report="$(
 Display the report:
 
 ```bash
+# Display the report stored in parameter_report.
 cat "$parameter_report"
 ```
+
+**Output command key**
+
+- `parameter_report=`: create a shell variable;
+- `$(...)`: run the enclosed commands and store the result;
+- `find`: search for files;
+- `-printf '%T@ %p\n'`: print the modification time and path;
+- `|`: pass one command's result to the next;
+- `sort -rn`: place the newest result first;
+- `head -n 1`: keep the first result;
+- `cut -d' ' -f2-`: remove the timestamp and keep the path;
+- `cat`: display the selected file.
 
 Expected content includes:
 
@@ -143,6 +177,7 @@ Teaching case: U13824
 Run the same workflow with a command-line parameter:
 
 ```bash
+# Run Lesson 4 with a custom case_name value.
 nextflow -C lessons/lesson.config run \
   lessons/04_parameters.nf \
   --case_name "Published UPEC case"
@@ -151,6 +186,7 @@ nextflow -C lessons/lesson.config run \
 Locate the newest output again:
 
 ```bash
+# Find the newest parameter report and save its path.
 parameter_report="$(
   find work \
     -name parameter_report.txt \
@@ -165,6 +201,7 @@ parameter_report="$(
 Display it:
 
 ```bash
+# Display the custom parameter report.
 cat "$parameter_report"
 ```
 
@@ -183,6 +220,7 @@ Only the parameter value changed.
 The command is:
 
 ```bash
+# Run the workflow with a custom parameter value.
 nextflow -C lessons/lesson.config run \
   lessons/04_parameters.nf \
   --case_name "Published UPEC case"
@@ -191,11 +229,12 @@ nextflow -C lessons/lesson.config run \
 The parts are:
 
 - `nextflow`: start Nextflow;
-- `-C lessons/lesson.config`: use the small lesson configuration;
+- `-C lessons/lesson.config`: use the lesson configuration;
 - `run`: execute a workflow;
 - `lessons/04_parameters.nf`: identify the workflow file;
 - `--case_name`: select the parameter;
-- `"Published UPEC case"`: provide the parameter value.
+- `"Published UPEC case"`: provide the parameter value;
+- `\`: continue the command on the next line.
 
 Nextflow parameters use two hyphens:
 
@@ -205,7 +244,7 @@ Nextflow parameters use two hyphens:
 
 ## Connection to HealthSeq-NF
 
-The complete HealthSeq-NF workflow uses parameters such as:
+The complete HealthSeq-NF Applied workflow uses parameters such as:
 
 ```text
 --input
@@ -217,12 +256,23 @@ The complete HealthSeq-NF workflow uses parameters such as:
 For example:
 
 ```bash
-nextflow run the complete applied workflow file \
+# Run the Applied workflow with a custom output directory.
+nextflow run main.nf \
   -profile test \
   --outdir student_results
 ```
 
-This command changes the output location without editing the complete applied workflow file.
+**Applied command key**
+
+- `main.nf`: the Applied workflow file;
+- `-profile test`: use the validated teaching profile;
+- `--outdir`: select the output-directory parameter;
+- `student_results`: provide the custom directory name.
+
+This command changes the output location without editing the Applied workflow
+file.
+
+This command belongs to the separate HealthSeq-NF Applied repository.
 
 Parameters make workflows easier to:
 
@@ -269,6 +319,7 @@ Answer these questions:
 Run:
 
 ```bash
+# Run Lesson 4 with another custom case_name value.
 nextflow -C lessons/lesson.config run \
   lessons/04_parameters.nf \
   --case_name "My reproducible workflow"
@@ -281,6 +332,7 @@ Confirm that the report includes the new value.
 Then run the default workflow again:
 
 ```bash
+# Run Lesson 4 without overriding the default value.
 nextflow -C lessons/lesson.config run lessons/04_parameters.nf
 ```
 
@@ -307,11 +359,26 @@ You have completed this lesson when:
 After completing the experiment, participants may record the checkpoint with:
 
 ```bash
+# Show the changed files.
 git status
+
+# Select the intentional lesson changes for the checkpoint.
 git add lessons/
+
+# Save the staged changes with a message describing the completed work.
 git commit -m "Complete parameter lesson"
+
+# Send the commit to GitHub.
 git push
 ```
+
+**Git key**
+
+- `git status`: show changed files;
+- `git add`: select changes for the next checkpoint;
+- `git commit`: save the staged changes;
+- `-m`: add a message explaining what the checkpoint accomplishes;
+- `git push`: send the commit to GitHub.
 
 Only commit intentional source or documentation changes. Do not commit files
 under `work/`.
