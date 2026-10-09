@@ -1,4 +1,4 @@
-# HealthSeq-NF Foundations: Student Project
+# HealthSeq-nf Foundations: Student Project
 
 HealthSeq-NF Foundations is a guided Nextflow project for learning how
 reproducible scientific workflows are designed, tested, documented, and shared.
