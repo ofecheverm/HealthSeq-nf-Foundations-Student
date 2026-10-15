@@ -1,4 +1,4 @@
-# HealthSeq-nf Foundations: Student Project
+# HealthSeq-nf Foundations: Student Project (Short Session Sponsored by STaiMIC on 29 & 30 Sep 2026)
 
 HealthSeq-NF Foundations is a guided Nextflow project for learning how
 reproducible scientific workflows are designed, tested, documented, and shared.
